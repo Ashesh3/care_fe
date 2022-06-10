@@ -82,7 +82,7 @@
     "react-dates": "^21.8.0",
     "react-dom": "18.1.0",
     "react-google-recaptcha": "^2.1.0",
-    "react-i18next": "^11.10.0",
+    "react-i18next": "^11.17.1",
     "react-leaflet-location-picker": "^1.4.2",
     "react-phone-input-2": "^2.14.0",
     "react-player": "^2.9.0",
