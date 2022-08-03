@@ -7,7 +7,6 @@ import { make as SlideOver } from "../Common/SlideOver.gen";
 // import { InputSearchBox } from "../Common/SearchBox";
 import { downloadResourceRequests } from "../../Redux/actions";
 import loadable from "@loadable/component";
-import { CSVLink } from "react-csv";
 import { useDispatch } from "react-redux";
 import moment from "moment";
 import CircularProgress from "@material-ui/core/CircularProgress";
@@ -32,7 +31,6 @@ export default function BoardView() {
   const [qParams, setQueryParams] = useQueryParams();
   const dispatch: any = useDispatch();
   const [boardFilter, setBoardFilter] = useState(ACTIVE);
-  const [downloadFile, setDownloadFile] = useState("");
   // eslint-disable-next-line
   const [isLoading, setIsLoading] = useState(false);
   // state to change download button to loading while file is not ready
@@ -81,8 +79,13 @@ export default function BoardView() {
     );
     // file ready to download
     setDownloadLoading(false);
-    setDownloadFile(res.data);
-    document.getElementById("resourceRequests-ALL")?.click();
+    const csvBlob = new Blob([res.data], {
+      type: "text/csv;charset=utf-8;",
+    });
+    window.open(
+      URL.createObjectURL(new File([csvBlob], `resource-requests--${now}.csv`)),
+      "_blank"
+    );
   };
 
   const onListViewBtnClick = () => {
@@ -176,13 +179,6 @@ export default function BoardView() {
           ))
         )}
       </div>
-      <CSVLink
-        data={downloadFile}
-        filename={`resource-requests--${now}.csv`}
-        target="_blank"
-        className="hidden"
-        id={"resourceRequests-ALL"}
-      />
       <SlideOver show={showFilters} setShow={setShowFilters}>
         <div className="bg-white min-h-screen p-4">
           <ListFilter

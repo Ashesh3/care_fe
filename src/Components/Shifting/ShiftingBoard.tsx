@@ -9,7 +9,6 @@ import Button from "@material-ui/core/Button";
 import { navigate } from "raviger";
 import moment from "moment";
 import { Modal } from "@material-ui/core";
-import { CSVLink } from "react-csv";
 import CircularProgress from "@material-ui/core/CircularProgress";
 import GetAppIcon from "@material-ui/icons/GetApp";
 
@@ -79,8 +78,15 @@ export default function ListView({
     );
     // file ready to download
     setDownloadLoading(false);
-    setDownloadFile(res.data);
-    document.getElementById(`shiftRequests-${board}`)?.click();
+    const csvBlob = new Blob([res.data], {
+      type: "text/csv;charset=utf-8;",
+    });
+    window.open(
+      URL.createObjectURL(
+        new File([csvBlob], `shift-requests-${board}-${now}.csv`)
+      ),
+      "_blank"
+    );
   };
 
   useEffect(() => {
@@ -403,13 +409,6 @@ export default function ListView({
             </button>
           ))}
       </div>
-      <CSVLink
-        data={downloadFile}
-        filename={`shift-requests-${board}-${now}.csv`}
-        target="_blank"
-        className="hidden"
-        id={`shiftRequests-${board}`}
-      />
     </div>
   );
 }

@@ -5,7 +5,6 @@ import { navigate, useQueryParams } from "raviger";
 import { useDispatch } from "react-redux";
 import moment from "moment";
 import GetAppIcon from "@material-ui/icons/GetApp";
-import { CSVLink } from "react-csv";
 import {
   listResourceRequests,
   downloadResourceRequests,
@@ -64,8 +63,13 @@ export default function ListView() {
     );
     // file ready to download
     setDownloadLoading(false);
-    setDownloadFile(res.data);
-    document.getElementById("resourceRequests-ALL")?.click();
+    const csvBlob = new Blob([res.data], {
+      type: "text/csv;charset=utf-8;",
+    });
+    window.open(
+      URL.createObjectURL(new File([csvBlob], `resource-requests--${now}.csv`)),
+      "_blank"
+    );
   };
 
   const updateQuery = (filter: any) => {
@@ -331,13 +335,6 @@ export default function ListView() {
         )}
       </div>
 
-      <CSVLink
-        data={downloadFile}
-        filename={`resource-requests--${now}.csv`}
-        target="_blank"
-        className="hidden"
-        id={"resourceRequests-ALL"}
-      />
       <SlideOver show={showFilters} setShow={setShowFilters}>
         <div className="bg-white min-h-screen p-4">
           <ListFilter

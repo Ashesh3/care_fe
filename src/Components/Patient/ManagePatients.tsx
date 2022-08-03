@@ -4,7 +4,6 @@ import { navigate, useQueryParams } from "raviger";
 import { parsePhoneNumberFromString } from "libphonenumber-js";
 import moment from "moment";
 import React, { useEffect, useState, useCallback } from "react";
-import { CSVLink } from "react-csv";
 import { useDispatch } from "react-redux";
 import SwipeableViews from "react-swipeable-views";
 import FacilitiesSelectDialogue from "../ExternalResult/FacilitiesSelectDialogue";
@@ -84,7 +83,6 @@ export const PatientManager = (props: any) => {
   const [data, setData] = useState<any[]>([]);
   const [isLoading, setIsLoading] = useState(false);
   const [totalCount, setTotalCount] = useState(0);
-  const [DownloadFile, setDownloadFile] = useState("");
   const [qParams, setQueryParams] = useQueryParams();
   const [showFilters, setShowFilters] = useState(false);
   const [selectedFacility, setSelectedFacility] = useState<FacilityModel>({
@@ -207,8 +205,13 @@ export const PatientManager = (props: any) => {
       )
     );
     if (res && res.data && res.status === 200) {
-      setDownloadFile(res.data);
-      document.getElementById("downloadlink")?.click();
+      const csvBlob = new Blob([res.data], {
+        type: "text/csv;charset=utf-8;",
+      });
+      window.open(
+        URL.createObjectURL(new File([csvBlob], `patients-${now}.csv`)),
+        "_blank"
+      );
     }
   };
   const handleDownloadAll = async () => {
@@ -467,7 +470,7 @@ export const PatientManager = (props: any) => {
             (patient.disease_status == "POSITIVE" ? "bg-red-100" : "")
           }
         >
-          <div className="pl-2 sm:flex md:block lg:flex gap-2 w-full">      
+          <div className="pl-2 sm:flex md:block lg:flex gap-2 w-full">
             <div>
               <div className="md:flex justify-between w-full">
                 <div className="text-xl font-normal capitalize">
@@ -558,8 +561,8 @@ export const PatientManager = (props: any) => {
               {patient.gender === 2 &&
                 patient.is_antenatal &&
                 patient.is_active && (
-                <Badge color="blue" icon="baby-carriage" text="Antenatal" />
-              )}
+                  <Badge color="blue" icon="baby-carriage" text="Antenatal" />
+                )}
               {patient.is_medical_worker && patient.is_active && (
                 <Badge color="blue" icon="user-md" text="Medical Worker" />
               )}
@@ -660,13 +663,6 @@ export const PatientManager = (props: any) => {
               <i className="fa-solid fa-arrow-down-long mr-2"></i>DOWNLOAD{" "}
               {tabValue === 0 ? "LIVE" : "DISCHARGED"} LIST
             </button>
-            <CSVLink
-              id="downloadlink"
-              className="hidden"
-              data={DownloadFile}
-              filename={`patients-${now}.csv`}
-              target="_blank"
-            ></CSVLink>
           </div>
           <div className="flex flex-col gap-2">
             <button

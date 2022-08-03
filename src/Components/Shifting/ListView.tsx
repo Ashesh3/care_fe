@@ -6,7 +6,6 @@ import { useDispatch } from "react-redux";
 import BadgesList from "./BadgesList";
 import moment from "moment";
 import GetAppIcon from "@material-ui/icons/GetApp";
-import { CSVLink } from "react-csv";
 import {
   listShiftRequests,
   completeTransfer,
@@ -61,8 +60,13 @@ export default function ListView() {
     );
     // file ready to download
     setDownloadLoading(false);
-    setDownloadFile(res.data);
-    document.getElementById("shiftRequests-ALL")?.click();
+    const csvBlob = new Blob([res.data], {
+      type: "text/csv;charset=utf-8;",
+    });
+    window.open(
+      URL.createObjectURL(new File([csvBlob], `shift-requests--${now}.csv`)),
+      "_blank"
+    );
   };
 
   const updateQuery = (filter: any) => {
@@ -442,13 +446,6 @@ export default function ListView() {
         )}
       </div>
 
-      <CSVLink
-        data={downloadFile}
-        filename={`shift-requests--${now}.csv`}
-        target="_blank"
-        className="hidden"
-        id={"shiftRequests-ALL"}
-      />
       <SlideOver show={showFilters} setShow={setShowFilters}>
         <div className="bg-white min-h-screen p-4">
           <ListFilter

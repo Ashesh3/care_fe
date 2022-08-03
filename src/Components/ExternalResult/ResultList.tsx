@@ -11,7 +11,6 @@ import { InputSearchBox } from "../Common/SearchBox";
 import { make as SlideOver } from "../Common/SlideOver.gen";
 import ListFilter from "./ListFilter";
 import moment from "moment";
-import { CSVLink } from "react-csv";
 import GetAppIcon from "@material-ui/icons/GetApp";
 import FacilitiesSelectDialogue from "./FacilitiesSelectDialogue";
 import { FacilityModel } from "../Facility/models";
@@ -29,7 +28,6 @@ export default function ResultList() {
   const [data, setData] = useState([]);
   const [isLoading, setIsLoading] = useState(false);
   const [totalCount, setTotalCount] = useState(0);
-  const [downloadFile, setDownloadFile] = useState("");
   const [qParams, setQueryParams] = useQueryParams();
   const [showFilters, setShowFilters] = useState(false);
   const [showDialog, setShowDialog] = useState(false);
@@ -209,8 +207,14 @@ export default function ResultList() {
     );
     // file ready to download
     setDownloadLoading(false);
-    setDownloadFile(res?.data);
-    document.getElementById("downloadCSV")?.click();
+    const csvBlob = new Blob([res.data], {
+      type: "text/csv;charset=utf-8;",
+    });
+    setDownloadLoading(false);
+    window.open(
+      URL.createObjectURL(new File([csvBlob], `external-result--${now}.csv`)),
+      "_blank"
+    );
   };
 
   const badge = (key: string, value: any, paramKey: string) => {
@@ -500,13 +504,6 @@ export default function ResultList() {
         </table>
         <div className="bg-white divide-y divide-gray-200">{pagination}</div>
       </div>
-      <CSVLink
-        data={downloadFile}
-        filename={`external-result--${now}.csv`}
-        target="_blank"
-        className="hidden"
-        id={"downloadCSV"}
-      />
       <SlideOver show={showFilters} setShow={setShowFilters}>
         <div className="bg-white min-h-screen p-4">
           <ListFilter

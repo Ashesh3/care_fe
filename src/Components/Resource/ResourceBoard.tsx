@@ -7,7 +7,6 @@ import {
 import CircularProgress from "@material-ui/core/CircularProgress";
 import { navigate } from "raviger";
 import moment from "moment";
-import { CSVLink } from "react-csv";
 import GetAppIcon from "@material-ui/icons/GetApp";
 
 const limit = 14;
@@ -40,7 +39,6 @@ export default function ResourceBoard({
 }: boardProps) {
   const dispatch: any = useDispatch();
   const [data, setData] = useState<any[]>([]);
-  const [downloadFile, setDownloadFile] = useState("");
   const [totalCount, setTotalCount] = useState();
   const [currentPage, setCurrentPage] = useState(1);
   // state to change download button to loading while file is not ready
@@ -74,8 +72,15 @@ export default function ResourceBoard({
     );
     // file ready to download
     setDownloadLoading(false);
-    setDownloadFile(res.data);
-    document.getElementById(`resourceRequests-${board}`)?.click();
+    const csvBlob = new Blob([res.data], {
+      type: "text/csv;charset=utf-8;",
+    });
+    window.open(
+      URL.createObjectURL(
+        new File([csvBlob], `resource-requests-${board}-${now}.csv`)
+      ),
+      "_blank"
+    );
   };
 
   useEffect(() => {
@@ -276,13 +281,6 @@ export default function ResourceBoard({
             </button>
           ))}
       </div>
-      <CSVLink
-        data={downloadFile}
-        filename={`resource-requests-${board}-${now}.csv`}
-        target="_blank"
-        className="hidden"
-        id={`resourceRequests-${board}`}
-      />
     </div>
   );
 }

@@ -27,7 +27,6 @@ import { InputLabel, TextField } from "@material-ui/core";
 import Pagination from "../Common/Pagination";
 import { FacilityModel } from "./models";
 import { InputSearchBox } from "../Common/SearchBox";
-import { CSVLink } from "react-csv";
 import moment from "moment";
 import { Theme, createStyles, makeStyles } from "@material-ui/core/styles";
 import Accordion from "@material-ui/core/Accordion";
@@ -201,8 +200,13 @@ export const HospitalList = (props: any) => {
     const res = await dispatchAction(downloadFacility());
     // file ready to download
     setDownloadLoading(false);
-    setDownloadFile(res.data);
-    document.getElementById("facilityDownloader")?.click();
+    const csvBlob = new Blob([res.data], {
+      type: "text/csv;charset=utf-8;",
+    });
+    window.open(
+      URL.createObjectURL(new File([csvBlob], `facilities-${now}.csv`)),
+      "_blank"
+    );
   };
 
   const handleCapacityDownload = async () => {
@@ -211,8 +215,13 @@ export const HospitalList = (props: any) => {
     const cap = await dispatchAction(downloadFacilityCapacity());
     // file ready to download
     setDownloadLoading(false);
-    setCapacityDownloadFile(cap.data);
-    document.getElementById("capacityDownloader")?.click();
+    const csvBlob = new Blob([cap.data], {
+      type: "text/csv;charset=utf-8;",
+    });
+    window.open(
+      URL.createObjectURL(new File([csvBlob], `facility-capacity-${now}.csv`)),
+      "_blank"
+    );
   };
 
   const handleDoctorsDownload = async () => {
@@ -221,8 +230,13 @@ export const HospitalList = (props: any) => {
     const doc = await dispatchAction(downloadFacilityDoctors());
     // file ready to download
     setDownloadLoading(false);
-    setDoctorsDownloadFile(doc.data);
-    document.getElementById("doctorsDownloader")?.click();
+    const csvBlob = new Blob([doc.data], {
+      type: "text/csv;charset=utf-8;",
+    });
+    window.open(
+      URL.createObjectURL(new File([csvBlob], `facility-doctors-${now}.csv`)),
+      "_blank"
+    );
   };
 
   const handleTriageDownload = async () => {
@@ -231,8 +245,13 @@ export const HospitalList = (props: any) => {
     const tri = await dispatchAction(downloadFacilityTriage());
     // file ready to download
     setDownloadLoading(false);
-    setTriageDownloadFile(tri.data);
-    document.getElementById("triageDownloader")?.click();
+    const csvBlob = new Blob([tri.data], {
+      type: "text/csv;charset=utf-8;",
+    });
+    window.open(
+      URL.createObjectURL(new File([csvBlob], `facility-triage-${now}.csv`)),
+      "_blank"
+    );
   };
 
   const updateQuery = (params: any) => {
@@ -592,36 +611,6 @@ export const HospitalList = (props: any) => {
                       </button>
                     )}
                   </div>
-                </div>
-                <div className="hidden">
-                  <CSVLink
-                    data={DownloadFile}
-                    filename={`facilities-${now}.csv`}
-                    target="_blank"
-                    className="hidden"
-                    id="facilityDownloader"
-                  ></CSVLink>
-                  <CSVLink
-                    data={capacityDownloadFile}
-                    filename={`facility-capacity-${now}.csv`}
-                    className="hidden"
-                    id="capacityDownloader"
-                    target="_blank"
-                  ></CSVLink>
-                  <CSVLink
-                    data={doctorsDownloadFile}
-                    filename={`facility-doctors-${now}.csv`}
-                    target="_blank"
-                    className="hidden"
-                    id="doctorsDownloader"
-                  ></CSVLink>
-                  <CSVLink
-                    data={triageDownloadFile}
-                    filename={`facility-triage-${now}.csv`}
-                    target="_blank"
-                    className="hidden"
-                    id="triageDownloader"
-                  ></CSVLink>
                 </div>
               </AccordionDetails>
             </Accordion>
