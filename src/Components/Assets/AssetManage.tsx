@@ -253,7 +253,7 @@ const AssetManage = (props: AssetManageProps) => {
             </div>
           )}
         </div>
-        <div className="flex mt-8 gap-1">
+        <div className="flex mt-8 gap-1 xx">
           <button
             onClick={() =>
               navigate(
