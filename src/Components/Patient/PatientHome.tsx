@@ -35,6 +35,7 @@ import clsx from "clsx";
 import Chip from "../../CAREUI/display/Chip";
 import { formatDate } from "../../Utils/utils";
 import ButtonV2 from "../Common/components/ButtonV2";
+import Tooltip from "../Common/utils/Tooltip";
 
 const Loading = loadable(() => import("../Common/Loading"));
 const PageTitle = loadable(() => import("../Common/PageTitle"));
@@ -726,17 +727,29 @@ export const PatientHome = (props: any) => {
                       Created
                     </div>
                     <div className="mt-1 text-sm leading-5 text-gray-900 whitespace-pre font-semibold">
-                      <div className="text-sm whitespace-normal">
-                        {patientData?.created_by?.first_name}{" "}
-                        {patientData?.created_by?.last_name}
-                      </div>
-                      {/* <div className="text-xs flex justify-center font-semibold">
+                      <div className="text-xs flex justify-center font-semibold">
                         {patientData.created_date && (
                           <div className="flex flex-col md:flex-row gap-1">
                             <div>{formatDate(patientData.created_date)}</div>
                           </div>
                         )}
-                      </div> */}
+                      </div>
+                      <button className="tooltip">
+                        <span className="tooltip-text tooltip-top">
+                          {patientData?.created_by?.first_name}{" "}
+                          {patientData?.created_by?.last_name}
+                        </span>
+                        <i className="group uil uil-user-circle"></i>
+                      </button>
+                      <Tooltip
+                        text={
+                          <>
+                            {patientData?.created_by?.first_name}{" "}
+                            {patientData?.created_by?.last_name}
+                          </>
+                        }
+                        children={<i className="group uil uil-user-circle"></i>}
+                      />
                     </div>
                   </div>
                   <div className="w-1/2 truncate pb-1">
