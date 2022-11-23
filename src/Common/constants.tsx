@@ -792,7 +792,7 @@ export const FACILITY_FEATURE_TYPES = [
   {
     id: 4,
     name: "Neonatal Care",
-    icon: "carriage",
+    icon: "baby-carriage",
   },
   {
     id: 5,
