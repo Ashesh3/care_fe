@@ -1,5 +1,5 @@
 [build]
-publish = "build/"
+publish = "build/"222
 command = "CI='' npm run build"
 
 ## Yarn 3 cache does not work out of the box as of Jan 2022. Context:
