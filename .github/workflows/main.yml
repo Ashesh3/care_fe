@@ -29,9 +29,15 @@ jobs:
     needs: check-linked-issues
     if: join(needs.check-linked-issues.outputs.linked_issues) != ''
     steps:
-      - name: PR Action
-        id: print-action
-        run: echo ${{ github.event.action }}
-      - name: Print has linked issues
-        id: has-linked-issues
-        run: echo ${{  needs.check-linked-issues.outputs.linked_issues  }}
+      - name: Print details
+        id: print-details
+        run: echo "${{ github.event.action }} ${{  needs.check-linked-issues.outputs.linked_issues  }}"
+      - name: Label issues
+        if: github.event.pull_request.merged == true
+        uses: actions/github-script@v6
+        with:
+          script: |
+            const issues = echo [\"${{  needs.check-linked-issues.outputs.linked_issues  }}\"] |sed 's/,/\", \"/g'
+            for (const issue of issues) {
+              console.log(issue);
+            }
