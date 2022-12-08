@@ -27,6 +27,7 @@ jobs:
     name: Label issues
     runs-on: ubuntu-latest
     needs: check-linked-issues
+    permissions: write-all
     if: join(needs.check-linked-issues.outputs.linked_issues) != ''
     steps:
       - name: Print details
