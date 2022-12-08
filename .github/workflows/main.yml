@@ -36,7 +36,7 @@ jobs:
           script: |
             const issues = "${{  needs.check-linked-issues.outputs.linked_issues  }}".split(',')
             for (const issue of issues) {
-              if (${{ github.event.pull_request.closed }})
+              if ("${{ github.event.pull_request.state }}" == "open")
                 github.rest.issues.addLabels({
                   issue_number: issue,
                   owner: context.repo.owner,
