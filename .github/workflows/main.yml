@@ -39,7 +39,7 @@ jobs:
           script: |
             const issues = echo [\"${{  needs.check-linked-issues.outputs.linked_issues  }}\"] |sed 's/,/\", \"/g'
             for (const issue of issues) {
-              if (${{ github.event.action }} != "closed")
+              if ("${{ github.event.action }}" != "closed")
                 github.rest.issues.addLabels({
                   issue_number: issue,
                   owner: context.repo.owner,
