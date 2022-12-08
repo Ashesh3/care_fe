@@ -11,8 +11,6 @@ jobs:
   check-linked-issues:
     name: Check if pull request has linked issues
     runs-on: ubuntu-latest
-    outputs:
-      linked_issues: ${{ steps.issue-output.outputs.linked_issues }}
     steps:
       - name: Get issues
         id: get-issues
@@ -27,11 +25,11 @@ jobs:
     name: Label all issues which will be closed by the PR
     runs-on: ubuntu-latest
     needs: check-linked-issues
-    if: join(needs.check-linked-issues.outputs.linked_issues) != ''
+    if: join(steps.issue-output.outputs.linked_issues) != ''
     steps:
       - name: PR Action
         id: print-action
         run: echo ${{ github.event.action }}
       - name: Print has linked issues
         id: has-linked-issues
-        run: echo ${{  needs.check-linked-issues.outputs.linked_issues  }}
+        run: echo ${{  steps.issue-output.outputs.linked_issues  }}
