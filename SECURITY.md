@@ -8,7 +8,7 @@
 | 1.0.x   | :white_check_mark: |
 
 ## Supported Browsers
-
+2
 | Browser           | Supported          |
 | ----------------- | ------------------ |
 | Firefox           | :white_check_mark: |
