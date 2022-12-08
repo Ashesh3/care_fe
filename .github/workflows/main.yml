@@ -25,7 +25,6 @@ jobs:
     name: Label all issues which will be closed by the PR
     runs-on: ubuntu-latest
     needs: check-linked-issues
-    if: join(job.steps.issue-output.outputs.linked_issues) != ''
     steps:
       - name: PR Action
         id: print-action
