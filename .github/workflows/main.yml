@@ -11,18 +11,26 @@ jobs:
   check-linked-issues:
     name: Check if pull request has linked issues
     runs-on: ubuntu-latest
+    outputs:
+      output1: ${{ steps.issue-output.outputs.linked_issues }}
     steps:
       - name: Get issues
         id: get-issues
         uses: mondeja/pr-linked-issues-action@v2
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      - name: Set output
+      - id: issue-output
+        run: echo "linked_issues=${{ steps.get-issues.outputs.issues }}" >> $GITHUB_OUTPUT
+  
+  label-issues:
+    name: Label all issues which will be closed by the PR
+    runs-on: ubuntu-latest
+    needs: check-linked-issues
+    if: join(steps.get-issues.outputs.issues) != ''
+    steps:
       - name: PR Action
         run: echo ${{ github.event.action }}
       - name: Print has linked issues
         id: has-linked-issues
-        if: join(steps.get-issues.outputs.issues) != ''
-        run: echo ${{ steps.get-issues.outputs.issues }}
-      - name: Print has not linked issues
-        if: steps.has-linked-issues.conclusion == 'skipped'
-        run: echo "Has not linked issues"
+        run: echo ${{  needs.check-linked-issues.outputs.linked_issues  }}
