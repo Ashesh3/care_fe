@@ -20,7 +20,7 @@ jobs:
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
       - name: Set output
-      - id: issue-output
+        id: issue-output
         run: echo "linked_issues=${{ steps.get-issues.outputs.issues }}" >> $GITHUB_OUTPUT
   
   label-issues:
@@ -30,6 +30,7 @@ jobs:
     if: join(steps.get-issues.outputs.issues) != ''
     steps:
       - name: PR Action
+        id: print-action
         run: echo ${{ github.event.action }}
       - name: Print has linked issues
         id: has-linked-issues
