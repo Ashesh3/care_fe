@@ -34,7 +34,6 @@ jobs:
         id: print-details
         run: echo "${{ github.event.action }} ${{  needs.check-linked-issues.outputs.linked_issues  }}"
       - name: Label issue (PR Open)
-        if: github.event.action != 'closed'
         uses: actions/github-script@v6
         with:
           script: |
