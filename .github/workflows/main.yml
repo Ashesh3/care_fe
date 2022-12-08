@@ -37,7 +37,20 @@ jobs:
         uses: actions/github-script@v6
         with:
           script: |
-            const issues = echo [\"${{  needs.check-linked-issues.outputs.linked_issues  }}\"] |sed 's/,/\", \"/g'
+            const issues = "${{  needs.check-linked-issues.outputs.linked_issues  }}".split(',')
             for (const issue of issues) {
-              console.log(issue);
+              if ("${{ github.event.action }}" != "closed")
+                github.rest.issues.addLabels({
+                  issue_number: issue,
+                  owner: context.repo.owner,
+                  repo: context.repo.repo,
+                  labels: ["work-in-progress"]
+                })
+              else
+                github.rest.issues.removeLabel({
+                  issue_number: issue,
+                  owner: context.repo.owner,
+                  repo: context.repo.repo,
+                  name: ["work-in-progress"]
+                })
             }
