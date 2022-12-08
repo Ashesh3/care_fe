@@ -1,16 +1,28 @@
-name: Work in Progress
-
+name: WIP
 on:
-  pull_request:
-    types: [opened, closed]
+  pull_request_target:
+    types:
+      - opened
+      - reopened
+      - edited
+      - closed
 
 jobs:
-  update-label:
+  check-linked-issues:
+    name: Check if pull request has linked issues
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v2
-      - uses: actions/labeler@v2
-        with:
-          labels: work-in-progress
-          add-label: true
-          remove-label: true
+      - name: Get issues
+        id: get-issues
+        uses: mondeja/pr-linked-issues-action@v2
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      - name: PR Action
+        run: echo ${{ github.event.action }}
+      - name: Print has linked issues
+        id: has-linked-issues
+        if: join(steps.get-issues.outputs.issues) != ''
+        run: echo ${{ steps.get-issues.outputs.issues }}
+      - name: Print has not linked issues
+        if: steps.has-linked-issues.conclusion == 'skipped'
+        run: echo "Has not linked issues"
