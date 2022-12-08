@@ -9,7 +9,7 @@ on:
 
 jobs:
   check-linked-issues:
-    name: Fetch issues
+    name: Check linked issues
     runs-on: ubuntu-latest
     outputs:
       linked_issues: ${{ steps.issue-output.outputs.linked_issues }}
@@ -24,22 +24,19 @@ jobs:
         run: echo "linked_issues=${{ steps.get-issues.outputs.issues }}" >> $GITHUB_OUTPUT
   
   label-issues:
-    name: Label issues
+    name: Label linked issues
     runs-on: ubuntu-latest
     needs: check-linked-issues
     permissions: write-all
     if: join(needs.check-linked-issues.outputs.linked_issues) != ''
     steps:
-      - name: Print details
-        id: print-details
-        run: echo "${{ github.event.action }} ${{  needs.check-linked-issues.outputs.linked_issues  }}"
-      - name: Label issue (PR Open)
+      - name: Label
         uses: actions/github-script@v6
         with:
           script: |
             const issues = "${{  needs.check-linked-issues.outputs.linked_issues  }}".split(',')
             for (const issue of issues) {
-              if ("${{ github.event.action }}" != "closed")
+              if (${{ github.event.pull_request.closed }})
                 github.rest.issues.addLabels({
                   issue_number: issue,
                   owner: context.repo.owner,
