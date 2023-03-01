@@ -32,7 +32,7 @@ jobs:
             const { assignees } = result.data
 
             if (assignees.length == 0) {
-              await github.rest.issues.createComment({ ...options, body })
+              await github.rest.issues.createComment({ ...options, body: thankyouNote })
               return
             }
 
