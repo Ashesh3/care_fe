@@ -11,6 +11,8 @@ jobs:
     runs-on: ubuntu-latest
     permissions:
       issues: write
+      pull-requests: write
+      contents: write
     steps:
       - name: Add thankyou note
         uses: actions/github-script@v6.3.3
