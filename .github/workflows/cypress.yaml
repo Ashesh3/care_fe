@@ -12,7 +12,7 @@ on:
 jobs:
   cypress-run:
     permissions: write-all
-    if: github.repository == 'coronasafe/care_fe'
+    if: github.repository == 'Ashesh3/care_fe'
     runs-on: ubuntu-latest
     steps:
       - name: Checkout 📥
