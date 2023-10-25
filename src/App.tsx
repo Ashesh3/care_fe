@@ -34,7 +34,7 @@ const App: FC = () => {
         });
       }
 
-      localStorage.setItem("config", JSON.stringify(config));
+      localStorage.setItem("config123", JSON.stringify(config));
     }
   }, [dispatch]);
 
