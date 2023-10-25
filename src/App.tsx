@@ -95,17 +95,17 @@ const App: FC = () => {
 
   return (
     <Suspense fallback={<Loading />}>
+      <ThemedFavicon />
       <HistoryAPIProvider>
-        <AppConfigContext.Provider value={config.data}>
-          {currentUser?.data ? (
-            <AuthUserContext.Provider value={currentUser.data}>
-              <AppRouter />
-            </AuthUserContext.Provider>
-          ) : (
-            <SessionRouter />
-          )}
-          <Plausible />
-        </AppConfigContext.Provider>
+        <AppConfigProvider>
+          <AuthUserProvider unauthorized={<Routers.SessionRouter />}>
+            <Routers.AppRouter />
+          </AuthUserProvider>
+
+          {/* Integrations */}
+          <Intergrations.Sentry disabled={!import.meta.env.PROD} />
+          <Intergrations.Plausible />
+        </AppConfigProvider>
       </HistoryAPIProvider>
     </Suspense>
   );
